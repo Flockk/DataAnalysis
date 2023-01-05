@@ -19,7 +19,7 @@ def main():
         print(name_str)
         result = ''.join(name_str)
         try:
-            for name in enumerate(name_str):
+            for count, name in enumerate(name_str):
                 if len(name) < 3:
                     raise LengthError(f'Менее трёх символов в строке!')
         except LengthError:
