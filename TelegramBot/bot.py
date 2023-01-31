@@ -15,19 +15,34 @@ dp = Dispatcher(bot)
 # Команда /start
 @dp.message_handler(commands='start')
 async def cmd_start(message: types.Message):
-    await message.answer("Здравствуйте! Я TouristBot!\nЯ способен сохранять места для будущего посещения.")
+    await message.answer("Здравствуйте! Я ваш личный TouristBot! Я способен сохранять места для будущего посещения. "
+                         "Вот, что я умею делать:\n\n1) Используйте команду /add, чтобы добавить новое место в свой "
+                         "список. Я попрошу вас ввести адрес, и я сохраню его для вас.\n\n2) Используйте команду /list,"
+                         "чтобы просмотреть последние 10 мест, которые вы добавили в свой список.\n\n3) Используйте "
+                         "команду /reset, чтобы удалить все сохраненные места из вашего списка.")
 
 
-# Команда /help
-@dp.message_handler(commands='help')
-async def cmd_help(message: types.Message):
-    await message.answer("Я могу повторить ваши сообщения!")
+# Команда /add
+@dp.message_handler(commands=['add'])
+async def cmd_add(message: types.Message):
+    await message.answer("Пожалуйста, введите адрес, который вы хотите добавить:")
+    address = await dp.message_handler()
+    await message.answer("Адрес добавлен успешно!")
+    pass
 
 
-# Отправка сообщения пользователю
-@dp.message_handler()
-async def echo_message(message: types.Message):
-    await bot.send_message(chat_id=message.from_user.id, text="Здравствуйте!")
+# Команда /list
+@dp.message_handler(commands=['list'])
+async def cmd_list(message: types.Message):
+    await message.answer("Последние 10 добавленных мест:")
+    pass
+
+
+# Команда /reset
+@dp.message_handler(commands=['reset'])
+async def cmd_reset(message: types.Message):
+    await message.answer("Все добавленные адреса были удалены.")
+    pass
 
 
 if __name__ == '__main__':
