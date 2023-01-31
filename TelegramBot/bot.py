@@ -1,5 +1,5 @@
 import logging
-
+import sqlite3
 from aiogram import Bot, Dispatcher, executor, types
 
 API_TOKEN = 'TOKEN_BOT'
@@ -10,6 +10,23 @@ logging.basicConfig(level=logging.INFO)
 # Инициализируем бота и диспетчера
 bot = Bot(token=API_TOKEN)
 dp = Dispatcher(bot)
+
+# Подключение к базе данных
+conn = sqlite3.connect('addresses.db', check_same_thread=False)
+cursor = conn.cursor()
+
+# Создание таблицы, в которой будут храниться адреса
+cursor.execute("""
+    CREATE TABLE IF NOT EXISTS addresses (
+        id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+        place_name TEXT NULL,
+        country TEXT NULL,
+        city TEXT NULL,
+        street TEXT NULL,
+        house_number INTEGER NOT NULL
+    );
+""")
+conn.commit()
 
 
 # Команда /start
@@ -26,8 +43,6 @@ async def cmd_start(message: types.Message):
 @dp.message_handler(commands=['add'])
 async def cmd_add(message: types.Message):
     await message.answer("Пожалуйста, введите адрес, который вы хотите добавить:")
-    address = await dp.message_handler()
-    await message.answer("Адрес добавлен успешно!")
     pass
 
 
@@ -41,7 +56,6 @@ async def cmd_list(message: types.Message):
 # Команда /reset
 @dp.message_handler(commands=['reset'])
 async def cmd_reset(message: types.Message):
-    await message.answer("Все добавленные адреса были удалены.")
     pass
 
 
